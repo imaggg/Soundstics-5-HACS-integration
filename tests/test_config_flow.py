@@ -9,7 +9,7 @@ from homeassistant.data_entry_flow import FlowResultType
 from custom_components.soundsticks.const import DOMAIN
 
 FAKE_DEVICE_INFO = {
-    "name": "imaggg's SoundSticks",
+    "name": "Test SoundSticks",
     "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05",
     "firmware": "26.22.31.63.00",
 }
@@ -43,7 +43,7 @@ async def test_user_flow_creates_entry(hass, enable_custom_integrations):
         result["flow_id"], {"cert_pem": "CERT", "key_pem": "KEY"}
     )
     assert result["type"] == FlowResultType.CREATE_ENTRY
-    assert result["title"] == "imaggg's SoundSticks"
+    assert result["title"] == "Test SoundSticks"
     assert result["data"]["host"] == "192.168.1.97"
     assert result["data"]["uuid"] == FAKE_DEVICE_INFO["uuid"]
     assert result["data"]["cert_pem"] == "CERT"
@@ -56,7 +56,7 @@ async def test_zeroconf_flow_creates_entry(hass, enable_custom_integrations):
         port=443,
         hostname="audiocast_ABCD.local.",
         type="_jbl-product._tcp.local.",
-        name="imaggg's SoundSticks._jbl-product._tcp.local.",
+        name="Test SoundSticks._jbl-product._tcp.local.",
         properties={},
     )
     result = await hass.config_entries.flow.async_init(
@@ -83,7 +83,7 @@ async def test_zeroconf_duplicate_aborts(hass, enable_custom_integrations):
         port=443,
         hostname="audiocast_ABCD.local.",
         type="_jbl-product._tcp.local.",
-        name="imaggg's SoundSticks._jbl-product._tcp.local.",
+        name="Test SoundSticks._jbl-product._tcp.local.",
         properties={},
     )
     # First flow completes and creates the entry.

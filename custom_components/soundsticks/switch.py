@@ -10,6 +10,7 @@ from typing import Any
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .entity import SoundSticksEntity
@@ -55,6 +56,7 @@ class SoundSticksMoment(SoundSticksEntity, SwitchEntity):
 
     _attr_translation_key = "moment"
     _attr_icon = "mdi:weather-partly-cloudy"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "moment")

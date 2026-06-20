@@ -41,9 +41,6 @@
       "volume": {
         "name": "Гучність"
       },
-      "moment_volume": {
-        "name": "Гучність Moment"
-      },
       "moment_element_1": {
         "name": "Moment, елемент 1"
       },

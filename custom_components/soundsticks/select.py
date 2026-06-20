@@ -8,6 +8,7 @@ from __future__ import annotations
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import api_gain_to_ui
@@ -38,6 +39,7 @@ class SoundSticksEQPresetSelect(SoundSticksEntity, SelectEntity):
     _attr_translation_key = "eq_preset"
     _attr_icon = "mdi:equalizer"
     _attr_options = list(EQ_PRESETS.values())
+    _attr_entity_category = EntityCategory.CONFIG
 
     def __init__(self, coordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "eq_preset")
@@ -72,6 +74,11 @@ class SoundSticksMomentMode(SoundSticksEntity, SelectEntity):
     _attr_translation_key = "moment_mode"
     _attr_icon = "mdi:weather-partly-cloudy"
     _attr_options = list(MOMENT_MODES.values())
+    # DIAGNOSTIC here is a pragmatic UI trick, not a literal "diagnostic"
+    # entity — HA only has CONFIG/DIAGNOSTIC as secondary buckets, and using
+    # both lets the device page show 3 groups (Controls / Configuration /
+    # Diagnostic) instead of 2, keeping Moment visually separate from EQ.
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "moment_mode")
@@ -101,6 +108,7 @@ class SoundSticksMomentSleepTimer(SoundSticksEntity, SelectEntity):
     _attr_translation_key = "moment_sleep_timer"
     _attr_icon = "mdi:timer-outline"
     _attr_options = list(MOMENT_SLEEP_TIMERS.values())
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "moment_sleep_timer")

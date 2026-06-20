@@ -10,7 +10,6 @@ from typing import Any
 
 import aiohttp
 import voluptuous as vol
-from homeassistant.components.zeroconf import ZeroconfServiceInfo
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST
 from homeassistant.helpers import selector
@@ -18,6 +17,11 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import SoundSticksClient, build_ssl_context
 from .const import CONF_CERT_PEM, CONF_DEVICE_NAME, CONF_KEY_PEM, CONF_UUID, DOMAIN, UPNP_DESCRIPTION_PORT
+
+try:  # moved here in newer HA core; older core only has the components.zeroconf path
+    from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+except ImportError:
+    from homeassistant.components.zeroconf import ZeroconfServiceInfo
 
 _LOGGER = logging.getLogger(__name__)
 

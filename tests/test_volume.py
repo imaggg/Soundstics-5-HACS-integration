@@ -21,7 +21,7 @@ FAKE_DATA = {
     CONF_CERT_PEM: "CERT",
     CONF_KEY_PEM: "KEY",
     CONF_UUID: "9051b2f7-084f-3405-812c-1a0fda8c6c05",
-    CONF_DEVICE_NAME: "imaggg's SoundSticks",
+    CONF_DEVICE_NAME: "Test SoundSticks",
 }
 
 LIGHT_INFO_JSON = {
@@ -41,7 +41,7 @@ def _mock_all_endpoints(aioclient_mock, vol="30", mute="0"):
     aioclient_mock.get(
         URL,
         params={"command": "getDeviceInfo"},
-        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "imaggg's SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
+        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "Test SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
     )
     aioclient_mock.get(URL, params={"command": "getLightInfo"}, json=LIGHT_INFO_JSON)
     aioclient_mock.get(URL, params={"command": "getEQList"}, json={"active_eq_id": "1", "eq_list": []})
@@ -82,28 +82,28 @@ async def setup_entry(hass, enable_custom_integrations, aioclient_mock):
 
 
 async def test_volume_number_reflects_state(hass, setup_entry):
-    state = hass.states.get("number.imaggg_s_soundsticks_volume")
+    state = hass.states.get("number.test_soundsticks_volume")
     assert state is not None
     assert state.state == "30"
 
 
 async def test_volume_number_set_value_issues_raw_get(hass, setup_entry, aioclient_mock):
     await hass.services.async_call(
-        "number", SERVICE_SET_VALUE, {ATTR_ENTITY_ID: "number.imaggg_s_soundsticks_volume", "value": 70}, blocking=True
+        "number", SERVICE_SET_VALUE, {ATTR_ENTITY_ID: "number.test_soundsticks_volume", "value": 70}, blocking=True
     )
     calls = [c for c in aioclient_mock.mock_calls if "setPlayerCmd:vol:70" in str(c[1])]
     assert calls, aioclient_mock.mock_calls
 
 
 async def test_mute_switch_reflects_state(hass, setup_entry):
-    state = hass.states.get("switch.imaggg_s_soundsticks_mute")
+    state = hass.states.get("switch.test_soundsticks_mute")
     assert state is not None
     assert state.state == "off"
 
 
 async def test_mute_switch_turn_on(hass, setup_entry, aioclient_mock):
     await hass.services.async_call(
-        "switch", SERVICE_TURN_ON, {ATTR_ENTITY_ID: "switch.imaggg_s_soundsticks_mute"}, blocking=True
+        "switch", SERVICE_TURN_ON, {ATTR_ENTITY_ID: "switch.test_soundsticks_mute"}, blocking=True
     )
     calls = [c for c in aioclient_mock.mock_calls if "setPlayerCmd:mute:1" in str(c[1])]
     assert calls, aioclient_mock.mock_calls
@@ -111,7 +111,7 @@ async def test_mute_switch_turn_on(hass, setup_entry, aioclient_mock):
 
 async def test_mute_switch_turn_off(hass, setup_entry, aioclient_mock):
     await hass.services.async_call(
-        "switch", SERVICE_TURN_OFF, {ATTR_ENTITY_ID: "switch.imaggg_s_soundsticks_mute"}, blocking=True
+        "switch", SERVICE_TURN_OFF, {ATTR_ENTITY_ID: "switch.test_soundsticks_mute"}, blocking=True
     )
     calls = [c for c in aioclient_mock.mock_calls if "setPlayerCmd:mute:0" in str(c[1])]
     assert calls, aioclient_mock.mock_calls

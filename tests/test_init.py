@@ -20,7 +20,7 @@ FAKE_DATA = {
     CONF_CERT_PEM: "CERT PEM CONTENT",
     CONF_KEY_PEM: "KEY PEM CONTENT",
     CONF_UUID: "9051b2f7-084f-3405-812c-1a0fda8c6c05",
-    CONF_DEVICE_NAME: "imaggg's SoundSticks",
+    CONF_DEVICE_NAME: "Test SoundSticks",
 }
 
 LIGHT_INFO_JSON = {
@@ -43,7 +43,7 @@ def _mock_all_endpoints(aioclient_mock):
     aioclient_mock.get(
         URL,
         params={"command": "getDeviceInfo"},
-        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "imaggg's SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
+        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "Test SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
     )
     aioclient_mock.get(URL, params={"command": "getLightInfo"}, json=LIGHT_INFO_JSON)
     aioclient_mock.get(URL, params={"command": "getEQList"}, json=EQ_LIST_JSON)

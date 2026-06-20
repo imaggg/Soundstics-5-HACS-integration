@@ -23,7 +23,7 @@ FAKE_DATA = {
     CONF_CERT_PEM: "CERT",
     CONF_KEY_PEM: "KEY",
     CONF_UUID: "9051b2f7-084f-3405-812c-1a0fda8c6c05",
-    CONF_DEVICE_NAME: "imaggg's SoundSticks",
+    CONF_DEVICE_NAME: "Test SoundSticks",
 }
 
 LIGHT_INFO_JSON = {
@@ -64,7 +64,7 @@ def _mock_all_endpoints(aioclient_mock):
     aioclient_mock.get(
         URL,
         params={"command": "getDeviceInfo"},
-        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "imaggg's SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
+        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "Test SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
     )
     aioclient_mock.get(URL, params={"command": "getLightInfo"}, json=LIGHT_INFO_JSON)
     aioclient_mock.get(URL, params={"command": "getEQList"}, json={"active_eq_id": "1", "eq_list": []})
@@ -109,32 +109,27 @@ def _raw_get_commands(aioclient_mock):
 
 
 async def test_moment_mode_select_reflects_active_mode(hass, setup_entry):
-    state = hass.states.get("select.imaggg_s_soundsticks_moment_mode")
+    state = hass.states.get("select.test_soundsticks_moment_mode")
     assert state is not None
     assert state.state == "Forest"  # soundscape_id=1
     assert set(state.attributes["options"]) == {"Forest", "Rain", "Ocean", "City"}
 
 
 async def test_moment_sleep_timer_select_reflects_state(hass, setup_entry):
-    state = hass.states.get("select.imaggg_s_soundsticks_moment_sleep_timer")
+    state = hass.states.get("select.test_soundsticks_moment_sleep_timer")
     assert state.state == "Off"
 
 
-async def test_moment_volume_number_reflects_state(hass, setup_entry):
-    state = hass.states.get("number.imaggg_s_soundsticks_moment_volume")
-    assert state.state == "70"
-
-
 async def test_moment_switch_initially_off(hass, setup_entry):
-    state = hass.states.get("switch.imaggg_s_soundsticks_moment")
+    state = hass.states.get("switch.test_soundsticks_moment")
     assert state.state == "off"
 
 
 async def test_moment_element_sliders_read_active_mode(hass, setup_entry):
     # active mode = soundscape_id 1 (Forest): elements id2=16(slider0), id1=9(slider1), id0=56(slider2)
-    s0 = hass.states.get("number.imaggg_s_soundsticks_moment_element_1")
-    s1 = hass.states.get("number.imaggg_s_soundsticks_moment_element_2")
-    s2 = hass.states.get("number.imaggg_s_soundsticks_moment_element_3")
+    s0 = hass.states.get("number.test_soundsticks_moment_element_1")
+    s1 = hass.states.get("number.test_soundsticks_moment_element_2")
+    s2 = hass.states.get("number.test_soundsticks_moment_element_3")
     assert float(s0.state) == 16
     assert float(s1.state) == 9
     assert float(s2.state) == 56
@@ -142,7 +137,7 @@ async def test_moment_element_sliders_read_active_mode(hass, setup_entry):
 
 async def test_moment_turn_on_sets_config_then_starts(hass, setup_entry, aioclient_mock):
     await hass.services.async_call(
-        "switch", SERVICE_TURN_ON, {ATTR_ENTITY_ID: "switch.imaggg_s_soundsticks_moment"}, blocking=True
+        "switch", SERVICE_TURN_ON, {ATTR_ENTITY_ID: "switch.test_soundsticks_moment"}, blocking=True
     )
     payloads = _all_post_payloads(aioclient_mock)
     set_config_calls = [p for c, p in payloads if c == "setSmartButtonConfig"]
@@ -152,22 +147,22 @@ async def test_moment_turn_on_sets_config_then_starts(hass, setup_entry, aioclie
     assert control_calls, payloads
     assert control_calls[-1] == {"action_id": 6, "autoResume": True, "fadeOut": "true", "soundscape_id": 1}
 
-    state = hass.states.get("switch.imaggg_s_soundsticks_moment")
+    state = hass.states.get("switch.test_soundsticks_moment")
     assert state.state == "on"
 
 
 async def test_moment_turn_off_stops(hass, setup_entry, aioclient_mock):
     await hass.services.async_call(
-        "switch", SERVICE_TURN_ON, {ATTR_ENTITY_ID: "switch.imaggg_s_soundsticks_moment"}, blocking=True
+        "switch", SERVICE_TURN_ON, {ATTR_ENTITY_ID: "switch.test_soundsticks_moment"}, blocking=True
     )
     await hass.services.async_call(
-        "switch", SERVICE_TURN_OFF, {ATTR_ENTITY_ID: "switch.imaggg_s_soundsticks_moment"}, blocking=True
+        "switch", SERVICE_TURN_OFF, {ATTR_ENTITY_ID: "switch.test_soundsticks_moment"}, blocking=True
     )
     payloads = _all_post_payloads(aioclient_mock)
     control_calls = [p for c, p in payloads if c == "controlSoundscapeV2"]
     assert control_calls[-1] == {"action_id": 7, "autoResume": True, "fadeOut": "true", "soundscape_id": 1}
 
-    state = hass.states.get("switch.imaggg_s_soundsticks_moment")
+    state = hass.states.get("switch.test_soundsticks_moment")
     assert state.state == "off"
 
 
@@ -175,7 +170,7 @@ async def test_moment_mode_select_switch_stops_prev_and_starts_new(hass, setup_e
     await hass.services.async_call(
         "select",
         SERVICE_SELECT_OPTION,
-        {ATTR_ENTITY_ID: "select.imaggg_s_soundsticks_moment_mode", "option": "Rain"},
+        {ATTR_ENTITY_ID: "select.test_soundsticks_moment_mode", "option": "Rain"},
         blocking=True,
     )
     payloads = _all_post_payloads(aioclient_mock)
@@ -192,7 +187,7 @@ async def test_moment_sleep_timer_select_updates_config_only(hass, setup_entry, 
     await hass.services.async_call(
         "select",
         SERVICE_SELECT_OPTION,
-        {ATTR_ENTITY_ID: "select.imaggg_s_soundsticks_moment_sleep_timer", "option": "30 min"},
+        {ATTR_ENTITY_ID: "select.test_soundsticks_moment_sleep_timer", "option": "30 min"},
         blocking=True,
     )
     payloads = _all_post_payloads(aioclient_mock)
@@ -206,7 +201,7 @@ async def test_moment_element_slider_set_value(hass, setup_entry, aioclient_mock
     await hass.services.async_call(
         "number",
         SERVICE_SET_VALUE,
-        {ATTR_ENTITY_ID: "number.imaggg_s_soundsticks_moment_element_1", "value": 80},
+        {ATTR_ENTITY_ID: "number.test_soundsticks_moment_element_1", "value": 80},
         blocking=True,
     )
     payloads = _all_post_payloads(aioclient_mock)

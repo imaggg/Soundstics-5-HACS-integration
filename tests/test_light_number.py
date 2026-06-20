@@ -23,7 +23,7 @@ FAKE_DATA = {
     CONF_CERT_PEM: "CERT",
     CONF_KEY_PEM: "KEY",
     CONF_UUID: "9051b2f7-084f-3405-812c-1a0fda8c6c05",
-    CONF_DEVICE_NAME: "imaggg's SoundSticks",
+    CONF_DEVICE_NAME: "Test SoundSticks",
 }
 
 LIGHT_INFO_JSON = {
@@ -43,7 +43,7 @@ def _mock_all_endpoints(aioclient_mock):
     aioclient_mock.get(
         URL,
         params={"command": "getDeviceInfo"},
-        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "imaggg's SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
+        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "Test SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
     )
     aioclient_mock.get(URL, params={"command": "getLightInfo"}, json=LIGHT_INFO_JSON)
     aioclient_mock.get(URL, params={"command": "getEQList"}, json={"active_eq_id": "1", "eq_list": []})
@@ -88,7 +88,7 @@ def _last_post_payload(aioclient_mock):
 
 
 async def test_light_state_reflects_coordinator_data(hass, setup_entry):
-    state = hass.states.get("light.imaggg_s_soundsticks")
+    state = hass.states.get("light.test_soundsticks")
     assert state is not None
     assert state.state == "on"
     assert state.attributes["brightness"] == round(45 * 255 / 100)
@@ -128,7 +128,7 @@ async def test_light_turn_off(hass, setup_entry, aioclient_mock):
 
 
 async def test_animation_speed_number(hass, setup_entry, aioclient_mock):
-    entity_id = "number.imaggg_s_soundsticks_animation_speed"
+    entity_id = "number.test_soundsticks_animation_speed"
     state = hass.states.get(entity_id)
     assert state.state == "2"
 
@@ -141,7 +141,7 @@ async def test_animation_speed_number(hass, setup_entry, aioclient_mock):
 
 
 async def test_pattern_color_number(hass, setup_entry, aioclient_mock):
-    entity_id = "number.imaggg_s_soundsticks_pattern_color"
+    entity_id = "number.test_soundsticks_pattern_color"
     state = hass.states.get(entity_id)
     assert state.state == "50"
 

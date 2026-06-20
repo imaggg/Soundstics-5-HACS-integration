@@ -23,7 +23,7 @@ FAKE_DATA = {
     CONF_CERT_PEM: "CERT",
     CONF_KEY_PEM: "KEY",
     CONF_UUID: "9051b2f7-084f-3405-812c-1a0fda8c6c05",
-    CONF_DEVICE_NAME: "imaggg's SoundSticks",
+    CONF_DEVICE_NAME: "Test SoundSticks",
 }
 
 LIGHT_INFO_JSON = {
@@ -55,7 +55,7 @@ def _mock_all_endpoints(aioclient_mock, active_eq_id="1"):
     aioclient_mock.get(
         URL,
         params={"command": "getDeviceInfo"},
-        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "imaggg's SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
+        json={"error_code": "0", "device_info": {"firmware": "26.22.31.63.00", "name": "Test SoundSticks", "uuid": "9051b2f7-084f-3405-812c-1a0fda8c6c05"}},
     )
     aioclient_mock.get(URL, params={"command": "getLightInfo"}, json=LIGHT_INFO_JSON)
     eq_json = dict(EQ_LIST_JSON, active_eq_id=active_eq_id)
@@ -100,7 +100,7 @@ def _last_post_payload(aioclient_mock):
 
 
 async def test_eq_preset_select_reflects_active_id(hass, setup_entry):
-    state = hass.states.get("select.imaggg_s_soundsticks_eq_preset")
+    state = hass.states.get("select.test_soundsticks_eq_preset")
     assert state is not None
     assert state.state == "Signature Sound"
     assert set(state.attributes["options"]) == {"Custom", "Signature Sound", "Vocal", "Energetic", "Chill"}
@@ -110,7 +110,7 @@ async def test_eq_preset_select_switches_factory_preset(hass, setup_entry, aiocl
     await hass.services.async_call(
         "select",
         SERVICE_SELECT_OPTION,
-        {ATTR_ENTITY_ID: "select.imaggg_s_soundsticks_eq_preset", "option": "Vocal"},
+        {ATTR_ENTITY_ID: "select.test_soundsticks_eq_preset", "option": "Vocal"},
         blocking=True,
     )
     command, payload = _last_post_payload(aioclient_mock)
@@ -123,7 +123,7 @@ async def test_eq_preset_select_custom_repushes_stored_curve(hass, setup_entry, 
     await hass.services.async_call(
         "select",
         SERVICE_SELECT_OPTION,
-        {ATTR_ENTITY_ID: "select.imaggg_s_soundsticks_eq_preset", "option": "Custom"},
+        {ATTR_ENTITY_ID: "select.test_soundsticks_eq_preset", "option": "Custom"},
         blocking=True,
     )
     command, payload = _last_post_payload(aioclient_mock)
@@ -135,11 +135,11 @@ async def test_eq_preset_select_custom_repushes_stored_curve(hass, setup_entry, 
 
 async def test_eq_band_gain_reads_custom_entry_unscaled(hass, setup_entry):
     # stored gain index 2 = 1.5 -> ui = 1.5*2 = 3.0
-    state = hass.states.get("number.imaggg_s_soundsticks_500_hz")
+    state = hass.states.get("number.test_soundsticks_500_hz")
     assert state is not None
     assert float(state.state) == 3.0
     # index 3 stored=4 -> ui=8.0
-    state_1k = hass.states.get("number.imaggg_s_soundsticks_1_khz")
+    state_1k = hass.states.get("number.test_soundsticks_1_khz")
     assert float(state_1k.state) == 8.0
 
 
@@ -147,7 +147,7 @@ async def test_eq_band_gain_set_value_updates_only_that_band(hass, setup_entry, 
     await hass.services.async_call(
         "number",
         SERVICE_SET_VALUE,
-        {ATTR_ENTITY_ID: "number.imaggg_s_soundsticks_125_hz", "value": -6},
+        {ATTR_ENTITY_ID: "number.test_soundsticks_125_hz", "value": -6},
         blocking=True,
     )
     command, payload = _last_post_payload(aioclient_mock)

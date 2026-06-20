@@ -9,6 +9,7 @@ from __future__ import annotations
 from homeassistant.components.number import NumberEntity, NumberMode
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import api_gain_to_ui
@@ -32,7 +33,6 @@ async def async_setup_entry(
         SoundSticksEQBandGain(coordinator, entry, band_index=i, hz=hz) for i, hz in enumerate(EQ_BANDS_HZ)
     )
     entities.append(SoundSticksVolume(coordinator, entry))
-    entities.append(SoundSticksMomentVolume(coordinator, entry))
     entities.extend(SoundSticksMomentElement(coordinator, entry, slider_index=i) for i in range(3))
     async_add_entities(entities)
 
@@ -99,6 +99,7 @@ class SoundSticksEQBandGain(SoundSticksEntity, NumberEntity):
     _attr_native_step = 0.5
     _attr_native_unit_of_measurement = "dB"
     _attr_mode = NumberMode.SLIDER
+    _attr_entity_category = EntityCategory.CONFIG
 
     def __init__(self, coordinator, entry: ConfigEntry, band_index: int, hz: int) -> None:
         self._band_index = band_index
@@ -146,29 +147,6 @@ class SoundSticksVolume(SoundSticksEntity, NumberEntity):
         await self.coordinator.async_request_refresh()
 
 
-class SoundSticksMomentVolume(SoundSticksEntity, NumberEntity):
-    """Volume of Moment soundscape playback (percent_of_volume, 0-100)."""
-
-    _attr_translation_key = "moment_volume"
-    _attr_icon = "mdi:volume-high"
-    _attr_native_min_value = 0
-    _attr_native_max_value = 100
-    _attr_native_step = 1
-    _attr_mode = NumberMode.SLIDER
-
-    def __init__(self, coordinator, entry: ConfigEntry) -> None:
-        super().__init__(coordinator, entry, "moment_volume")
-
-    @property
-    def native_value(self) -> float:
-        return self.coordinator.data.smart_button.volume
-
-    async def async_set_native_value(self, value: float) -> None:
-        sb = self.coordinator.data.smart_button
-        await self.coordinator.client.set_smart_button_config(sb.soundscape_id, int(value), sb.sleep_timer)
-        await self.coordinator.async_request_refresh()
-
-
 class SoundSticksMomentElement(SoundSticksEntity, NumberEntity):
     """One of the 3 element-volume sliders for the currently active Moment
     mode. Slider meaning changes with the mode (e.g. Forest's 3 elements
@@ -180,6 +158,7 @@ class SoundSticksMomentElement(SoundSticksEntity, NumberEntity):
     _attr_native_max_value = 100
     _attr_native_step = 1
     _attr_mode = NumberMode.SLIDER
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator, entry: ConfigEntry, slider_index: int) -> None:
         self._slider_index = slider_index

@@ -41,9 +41,6 @@
       "volume": {
         "name": "Volume"
       },
-      "moment_volume": {
-        "name": "Moment volume"
-      },
       "moment_element_1": {
         "name": "Moment element 1"
       },
