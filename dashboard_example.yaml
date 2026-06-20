@@ -1,0 +1,51 @@
+# Example Lovelace card for the SoundSticks 5 integration.
+# The auto-generated device page can't have custom section titles or
+# conditional visibility (HA only labels entity_category groups as
+# "Controls"/"Configuration"/"Diagnostic") — this card gives you real
+# control: "Equalizer"/"Moment" titles, preset above bands, and EQ bands
+# only shown when the Custom preset is active.
+#
+# How to use: Edit Dashboard -> Add Card -> Manual (YAML) -> paste this in.
+# Replace the entity_id prefix (imaggg_s_soundsticks) if yours differs —
+# check Settings -> Devices & Services -> your device -> entity list.
+
+type: vertical-stack
+cards:
+  - type: entities
+    title: Основне
+    entities:
+      - entity: light.imaggg_s_soundsticks
+      - entity: number.imaggg_s_soundsticks_volume
+      - entity: switch.imaggg_s_soundsticks_mute
+      - entity: number.imaggg_s_soundsticks_animation_speed
+      - entity: number.imaggg_s_soundsticks_pattern_color
+
+  - type: entities
+    title: Еквалайзер
+    entities:
+      - entity: select.imaggg_s_soundsticks_eq_preset
+
+  - type: conditional
+    conditions:
+      - entity: select.imaggg_s_soundsticks_eq_preset
+        state: Custom
+    card:
+      type: entities
+      entities:
+        - entity: number.imaggg_s_soundsticks_125_hz
+        - entity: number.imaggg_s_soundsticks_250_hz
+        - entity: number.imaggg_s_soundsticks_500_hz
+        - entity: number.imaggg_s_soundsticks_1_khz
+        - entity: number.imaggg_s_soundsticks_2_khz
+        - entity: number.imaggg_s_soundsticks_4_khz
+        - entity: number.imaggg_s_soundsticks_8_khz
+
+  - type: entities
+    title: Moment
+    entities:
+      - entity: switch.imaggg_s_soundsticks_moment
+      - entity: select.imaggg_s_soundsticks_moment_mode
+      - entity: select.imaggg_s_soundsticks_moment_sleep_timer
+      - entity: number.imaggg_s_soundsticks_moment_element_1
+      - entity: number.imaggg_s_soundsticks_moment_element_2
+      - entity: number.imaggg_s_soundsticks_moment_element_3

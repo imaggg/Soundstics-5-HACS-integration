@@ -15,6 +15,11 @@ import aiohttp
 
 from .const import EQ_PRESET_PAYLOADS
 
+# Per-request timeout. The shared HA aiohttp session defaults to a 300s total
+# timeout, which would let a hung Linkplay device stall a coordinator poll for
+# minutes. Keep it short so a stuck request fails fast into UpdateFailed/retry.
+_REQUEST_TIMEOUT = aiohttp.ClientTimeout(total=10)
+
 
 def build_ssl_context(cert_path: str, key_path: str) -> ssl.SSLContext:
     """Build the client-cert SSL context. Run in an executor — this does file I/O.
@@ -137,7 +142,9 @@ class SoundSticksClient:
 
     async def _get(self, command: str) -> Any:
         url = f"{self._base_url}/httpapi.asp"
-        async with self._session.get(url, params={"command": command}, ssl=self._ssl_context) as resp:
+        async with self._session.get(
+            url, params={"command": command}, ssl=self._ssl_context, timeout=_REQUEST_TIMEOUT
+        ) as resp:
             text = await resp.text()
         if not text:
             return {}
@@ -146,7 +153,7 @@ class SoundSticksClient:
     async def _raw_get(self, command: str) -> None:
         # Some commands (setPlayerCmd:vol:N) need literal colons, unencoded.
         url = f"{self._base_url}/httpapi.asp?command={command}"
-        async with self._session.get(url, ssl=self._ssl_context) as resp:
+        async with self._session.get(url, ssl=self._ssl_context, timeout=_REQUEST_TIMEOUT) as resp:
             await resp.read()
 
     async def _post(self, command: str, payload: Any) -> None:
@@ -156,7 +163,9 @@ class SoundSticksClient:
         body = f"command={command}&payload={json.dumps(payload)}"
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         url = f"{self._base_url}/httpapi.asp"
-        async with self._session.post(url, data=body.encode(), headers=headers, ssl=self._ssl_context) as resp:
+        async with self._session.post(
+            url, data=body.encode(), headers=headers, ssl=self._ssl_context, timeout=_REQUEST_TIMEOUT
+        ) as resp:
             await resp.read()
 
     # -- lights --------------------------------------------------------------
