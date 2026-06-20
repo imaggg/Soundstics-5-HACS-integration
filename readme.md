@@ -14,14 +14,14 @@ device, same protocol used by the official Harman Kardon One app.
 | Animation speed | `number` | pattern animation speed, 1–5 |
 | Pattern color | `number` | pattern color/level, 0–100 |
 | EQ preset | `select` | Custom + 4 factory presets (Signature Sound, Vocal, Energetic, Chill) |
-| 125 Hz … 8 kHz | `number` × 7 | Custom EQ band gain, ±12 dB |
+| 125 Hz … 8 kHz | `number`  | Custom EQ band gain, ±12 dB |
 | Volume | `number` | speaker output volume, 0–100 |
 | Mute | `switch` | |
 | Moment | `switch` | starts/stops soundscape playback |
 | Moment mode | `select` | Forest, Rain, Ocean, City |
 | Moment sleep timer | `select` | off / 15 / 30 / 45 / 60 min |
 | Moment volume | `number` | soundscape playback volume, 0–100 |
-| Moment element 1–3 | `number` × 3 | per-mode element sliders (meaning changes with the active mode) |
+| Moment element 1–3 | `number` | per-mode element sliders (meaning changes with the active mode) |
 
 All polled every 5 seconds via a `DataUpdateCoordinator`.
 
