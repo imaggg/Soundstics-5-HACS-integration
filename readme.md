@@ -4,8 +4,7 @@ Unofficial [HACS](https://hacs.xyz/) custom integration for **Harman Kardon
 SoundSticks 5 WiFi** speakers. No cloud, no account — pure local mTLS to the
 device, same protocol used by the official Harman Kardon One app.
 
-Companion project to [soundsticks-app](https://github.com/imaggg/soundsticks-app)
-(macOS/Linux/Windows tray app for the same speaker).
+
 
 ## Entities
 
@@ -37,7 +36,8 @@ embed or distribute that certificate. Instead:
 3. Run `python3 scripts/extract_cert.py path/to/harman-kardon-one.xapk` —
    produces `cert.pem` and `key.pem` locally.
 4. In Home Assistant: **Settings → Devices & Services → Add Integration →
-   SoundSticks 5**. The speaker is usually auto-discovered via mDNS; if not,
+   SoundSticks
+5. The speaker is usually auto-discovered via mDNS; if not,
    enter its IP manually. Paste the contents of the generated `cert.pem` /
    `key.pem` when prompted.
 
