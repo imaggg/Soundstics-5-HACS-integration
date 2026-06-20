@@ -21,3 +21,6 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
+          # Skip the brands check until icon/logo are submitted to
+          # home-assistant/brands (see assets/brand/README.md).
+          ignore: brands

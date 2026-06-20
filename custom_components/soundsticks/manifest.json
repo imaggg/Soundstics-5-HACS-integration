@@ -3,9 +3,9 @@
   "name": "SoundSticks 5",
   "codeowners": ["@imaggg"],
   "config_flow": true,
-  "documentation": "https://github.com/imaggg/soundsticks-ha",
-  "issue_tracker": "https://github.com/imaggg/soundsticks-ha/issues",
+  "documentation": "https://github.com/imaggg/Soundstics-5-HACS-integration",
   "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/imaggg/Soundstics-5-HACS-integration/issues",
   "requirements": [],
   "version": "0.1.0",
   "zeroconf": ["_jbl-product._tcp.local."]
