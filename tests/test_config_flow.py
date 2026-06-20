@@ -3,8 +3,12 @@ from unittest.mock import patch
 
 import pytest
 from homeassistant import config_entries
-from homeassistant.components.zeroconf import ZeroconfServiceInfo
 from homeassistant.data_entry_flow import FlowResultType
+
+try:  # moved here in newer HA core; older core only has the components.zeroconf path
+    from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+except ImportError:
+    from homeassistant.components.zeroconf import ZeroconfServiceInfo
 
 from custom_components.soundsticks.const import DOMAIN
 

@@ -1,2 +1,5 @@
 pytest-homeassistant-custom-component
 cryptography
+# Not a direct homeassistant dependency on PyPI, but homeassistant.components.zeroconf
+# (imported by the config flow / its tests on older HA) needs it.
+zeroconf
