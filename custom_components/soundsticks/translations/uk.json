@@ -1,0 +1,77 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Підключення до SoundSticks 5",
+        "description": "Введіть IP-адресу або hostname вашої колонки SoundSticks 5.",
+        "data": {
+          "host": "Адреса"
+        }
+      },
+      "zeroconf_confirm": {
+        "title": "Знайдено SoundSticks 5",
+        "description": "У вашій мережі знайдено \"{name}\". Продовжити налаштування?"
+      },
+      "cert": {
+        "title": "Клієнтський сертифікат",
+        "description": "Вставте cert.pem та key.pem, згенеровані scripts/extract_cert.py (дивіться README інтеграції — як отримати їх з додатку Harman Kardon One).",
+        "data": {
+          "cert_pem": "Сертифікат (cert.pem)",
+          "key_pem": "Приватний ключ (key.pem)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не вдалося підключитися до колонки. Перевірте адресу та чи увімкнена колонка в тій самій мережі.",
+      "invalid_cert": "Колонка відхилила сертифікат/ключ. Запустіть scripts/extract_cert.py ще раз і спробуйте знову."
+    },
+    "abort": {
+      "already_configured": "Цей пристрій вже налаштовано.",
+      "not_soundsticks": "Знайдений пристрій не відповів як колонка SoundSticks 5."
+    }
+  },
+  "entity": {
+    "number": {
+      "animation_speed": {
+        "name": "Швидкість анімації"
+      },
+      "pattern_color": {
+        "name": "Колір патерну"
+      },
+      "volume": {
+        "name": "Гучність"
+      },
+      "moment_volume": {
+        "name": "Гучність Moment"
+      },
+      "moment_element_1": {
+        "name": "Moment, елемент 1"
+      },
+      "moment_element_2": {
+        "name": "Moment, елемент 2"
+      },
+      "moment_element_3": {
+        "name": "Moment, елемент 3"
+      }
+    },
+    "select": {
+      "eq_preset": {
+        "name": "Пресет еквалайзера"
+      },
+      "moment_mode": {
+        "name": "Режим Moment"
+      },
+      "moment_sleep_timer": {
+        "name": "Таймер сну Moment"
+      }
+    },
+    "switch": {
+      "mute": {
+        "name": "Без звуку"
+      },
+      "moment": {
+        "name": "Moment"
+      }
+    }
+  }
+}

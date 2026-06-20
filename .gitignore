@@ -1,0 +1,29 @@
+info.md
+
+# Secrets — never commit extracted certs/keys or sample APKs
+*.p12
+*.pem
+*.apk
+*.xapk
+cert.pem
+key.pem
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# HA dev / test environments
+.HA/
+config/.storage/
+config/home-assistant_v2.db
+config/home-assistant.log*
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
